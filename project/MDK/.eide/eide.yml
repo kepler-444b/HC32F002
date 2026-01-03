@@ -1,0 +1,232 @@
+version: "4.1"
+name: HC32F002
+type: ARM
+deviceName: null
+packDir: null
+srcDirs: []
+virtualFolder:
+  name: <virtual_root>
+  files: []
+  folders:
+    - name: common
+      files:
+        - path: startup_hc32f002.s
+        - path: ../../mcu/common/system_hc32f002.c
+        - path: ../../mcu/common/interrupts_hc32f002.c
+      folders: []
+    - name: App_main
+      files:
+        - path: ../source/main.c
+      folders: []
+    - name: driver
+      files:
+        - path: ../../driver/src/ddl.c
+        - path: ../../driver/src/sysctrl.c
+        - path: ../../driver/inc/adc.h
+        - path: ../../driver/inc/atim3.h
+        - path: ../../driver/inc/btim.h
+        - path: ../../driver/inc/ctrim.h
+        - path: ../../driver/inc/ddl.h
+        - path: ../../driver/inc/flash.h
+        - path: ../../driver/inc/gpio.h
+        - path: ../../driver/inc/gtim.h
+        - path: ../../driver/inc/i2c.h
+        - path: ../../driver/inc/iwdt.h
+        - path: ../../driver/inc/lpm.h
+        - path: ../../driver/inc/lpuart.h
+        - path: ../../driver/inc/lvd.h
+        - path: ../../driver/inc/spi.h
+        - path: ../../driver/inc/sysctrl.h
+        - path: ../../driver/inc/wwdt.h
+        - path: ../../driver/src/adc.c
+        - path: ../../driver/src/atim3.c
+        - path: ../../driver/src/btim.c
+        - path: ../../driver/src/ctrim.c
+        - path: ../../driver/src/flash.c
+        - path: ../../driver/src/gpio.c
+        - path: ../../driver/src/gtim.c
+        - path: ../../driver/src/i2c.c
+        - path: ../../driver/src/iwdt.c
+        - path: ../../driver/src/lpm.c
+        - path: ../../driver/src/lpuart.c
+        - path: ../../driver/src/lvd.c
+        - path: ../../driver/src/spi.c
+        - path: ../../driver/src/wwdt.c
+      folders: []
+    - name: APP
+      files:
+        - path: ../Source/App/app_timer.c
+        - path: ../Source/App/app_timer.h
+        - path: ../Source/App/app_base.c
+        - path: ../Source/App/app_base.h
+        - path: ../Source/App/app_protocol.c
+        - path: ../Source/App/app_protocol.h
+      folders: []
+    - name: Bsp
+      files:
+        - path: ../Source/Bsp/bsp_gpio.c
+        - path: ../Source/Bsp/bsp_gpio.h
+        - path: ../Source/Bsp/bsp_usart.c
+        - path: ../Source/Bsp/bsp_usart.h
+        - path: ../Source/Bsp/bsp_pcb.c
+        - path: ../Source/Bsp/bsp_pcb.h
+        - path: ../Source/Bsp/bsp_595/bsp_595.c
+        - path: ../Source/Bsp/bsp_595/bsp_595.h
+        - path: ../Source/Bsp/bsp_adc.c
+        - path: ../Source/Bsp/bsp_adc.h
+        - path: ../Source/Bsp/bsp_flash.c
+        - path: ../Source/Bsp/bsp_flash.h
+      folders: []
+    - name: README
+      files:
+        - path: ../readme.txt
+      folders: []
+    - name: Rtt
+      files:
+        - path: ../Source/Rtt/SEGGER_RTT.c
+        - path: ../Source/Rtt/SEGGER_RTT.h
+        - path: ../Source/Rtt/SEGGER_RTT_Conf.h
+        - path: ../Source/Rtt/SEGGER_RTT_printf.c
+      folders: []
+    - name: ::CMSIS
+      files: []
+      folders: []
+    - name: Dev
+      files:
+        - path: ../Source/Dev/dev_panel.c
+        - path: ../Source/Dev/dev_panel.h
+        - path: ../Source/Dev/dev_manager.c
+        - path: ../Source/Dev/dev_manager.h
+        - path: ../Source/Dev/dev_config.c
+        - path: ../Source/Dev/dev_config.h
+      folders: []
+dependenceList: []
+outDir: build
+miscInfo:
+  uid: ddf15101ae9bf00916812be616b44165
+targets:
+  HC32F002:
+    cppPreprocessAttrs:
+      defineList: []
+      incList:
+        - ../../mcu/common
+        - ../Source
+        - ../../driver/inc
+        - .cmsis/include
+        - RTE/_HC32F002
+      libList: []
+    excludeList: []
+    toolchain: AC6
+    toolchainConfigMap:
+      AC6:
+        archExtensions: ""
+        cpuType: Cortex-M0+
+        floatingPointHardware: none
+        options:
+          version: 3
+          afterBuildTasks: []
+          asm-compiler:
+            $use: asm-auto
+          beforeBuildTasks: []
+          c/cpp-compiler:
+            language-c: c11
+            language-cpp: c++11
+            one-elf-section-per-function: true
+            optimization: level-2
+            warnings: misra-compatible
+          global:
+            output-debug-info: enable
+            use-microLIB: true
+          linker:
+            $outputTaskExcludes:
+              - .bin
+            misc-controls: --keep=*Handler
+            output-format: elf
+            ro-base: "0x00000000"
+            rw-base: "0x20000000"
+        scatterFilePath: template.sct
+        storageLayout:
+          RAM:
+            - id: 1
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: RAM
+            - id: 2
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: RAM
+            - id: 3
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: RAM
+            - id: 1
+              isChecked: true
+              mem:
+                size: "0x800"
+                startAddr: "0x20000000"
+              noInit: false
+              tag: IRAM
+            - id: 2
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: IRAM
+          ROM:
+            - id: 1
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: ROM
+            - id: 2
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: ROM
+            - id: 3
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: ROM
+            - id: 1
+              isChecked: true
+              isStartup: true
+              mem:
+                size: "0x4800"
+                startAddr: "0x0"
+              tag: IROM
+            - id: 2
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: IROM
+        useCustomScatterFile: false
+    uploadConfigMap:
+      JLink:
+        baseAddr: ""
+        bin: ""
+        cpuInfo:
+          cpuName: HC32F002
+          vendor: XHSC
+        otherCmds: ""
+        proType: 1
+        speed: 8000
+    uploader: JLink

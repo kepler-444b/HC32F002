@@ -1,0 +1,235 @@
+Dependencies for Project 'gpio_inout', Target 'gpio_inout_Release': (DO NOT MODIFY !)
+CompilerVersion: 6240000::V6.24::ARMCLANG
+F (.\startup_hc32f002.s)(0x68D74561)(--cpu Cortex-M0+ -g --pd "__MICROLIB SETA 1" --diag_suppress=A1950W-I.\RTE\_gpio_inout_Release-ID:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include-ID:\Keil\Arm\Packs\HDSC\HC32F002\1.0.0\Device\Include--pd "__UVISION_VERSION SETA 543"--pd "_RTE_ SETA 1"-o .\output\release\startup_hc32f002.o--depend .\output\release\startup_hc32f002.d)
+F (..\..\..\..\mcu\common\system_hc32f002.c)(0x64DD6E76)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/system_hc32f002.o -MMD)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+F (..\..\..\..\mcu\common\interrupts_hc32f002.c)(0x64DD6E76)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/interrupts_hc32f002.o -MMD)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+F (..\source\main.c)(0x6945F8F8)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/main.o -MMD)
+I (..\source\led.h)(0x64F83B85)
+I (..\source\sys.h)(0x6945F576)
+I (..\..\..\..\driver\inc\gpio.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+I (..\..\..\..\driver\inc\flash.h)(0x64DD6E76)
+I (..\source\RelayAPP.h)(0x6945F4D7)
+I (..\..\..\..\driver\inc\atim3.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\lpuart.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\wwdt.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\adc.h)(0x64DD6E76)
+I (..\source\key.h)(0x66264336)
+I (..\source\xunSub.h)(0x6945F7A9)
+F (..\source\sys.c)(0x6945F342)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/sys.o -MMD)
+I (..\source\sys.h)(0x6945F576)
+I (..\..\..\..\driver\inc\gpio.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+I (..\..\..\..\driver\inc\flash.h)(0x64DD6E76)
+I (..\source\RelayAPP.h)(0x6945F4D7)
+I (..\..\..\..\driver\inc\atim3.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\lpuart.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\wwdt.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\adc.h)(0x64DD6E76)
+I (..\source\xunSub.h)(0x6945F7A9)
+I (..\source\key.h)(0x66264336)
+I (..\source\led.h)(0x64F83B85)
+F (..\source\led.c)(0x6945F889)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/led.o -MMD)
+I (..\source\led.h)(0x64F83B85)
+I (..\source\sys.h)(0x6945F576)
+I (..\..\..\..\driver\inc\gpio.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+I (..\..\..\..\driver\inc\flash.h)(0x64DD6E76)
+I (..\source\RelayAPP.h)(0x6945F4D7)
+I (..\..\..\..\driver\inc\atim3.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\lpuart.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\wwdt.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\adc.h)(0x64DD6E76)
+I (..\source\key.h)(0x66264336)
+F (..\source\key.c)(0x6945F6C1)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/key.o -MMD)
+I (..\source\key.h)(0x66264336)
+I (..\source\sys.h)(0x6945F576)
+I (..\..\..\..\driver\inc\gpio.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+I (..\..\..\..\driver\inc\flash.h)(0x64DD6E76)
+I (..\source\RelayAPP.h)(0x6945F4D7)
+I (..\..\..\..\driver\inc\atim3.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\lpuart.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\wwdt.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\adc.h)(0x64DD6E76)
+I (..\source\led.h)(0x64F83B85)
+I (..\source\usart.h)(0x64DD6E78)
+F (..\source\xunSub.c)(0x6945F1F5)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/xunsub.o -MMD)
+I (..\source\xunSub.h)(0x6945F7A9)
+I (..\source\sys.h)(0x6945F576)
+I (..\..\..\..\driver\inc\gpio.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+I (..\..\..\..\driver\inc\flash.h)(0x64DD6E76)
+I (..\source\RelayAPP.h)(0x6945F4D7)
+I (..\..\..\..\driver\inc\atim3.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\lpuart.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\wwdt.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\adc.h)(0x64DD6E76)
+I (..\source\key.h)(0x66264336)
+I (..\source\led.h)(0x64F83B85)
+F (..\source\RelayApp.c)(0x6945F7F4)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/relayapp.o -MMD)
+I (..\source\RelayAPP.h)(0x6945F4D7)
+I (..\source\sys.h)(0x6945F576)
+I (..\..\..\..\driver\inc\gpio.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+I (..\..\..\..\driver\inc\flash.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\atim3.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\lpuart.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\wwdt.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\adc.h)(0x64DD6E76)
+I (..\source\xunSub.h)(0x6945F7A9)
+I (..\source\key.h)(0x66264336)
+I (..\source\led.h)(0x64F83B85)
+F (..\..\..\..\driver\src\ddl.c)(0x64DD6E76)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/ddl.o -MMD)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+F (..\..\..\..\driver\src\sysctrl.c)(0x64DD6E76)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/sysctrl.o -MMD)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+F (..\..\..\..\driver\src\gpio.c)(0x64DD6E76)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/gpio.o -MMD)
+I (..\..\..\..\driver\inc\gpio.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+F (..\..\..\..\driver\src\atim3.c)(0x64DD6E76)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/atim3.o -MMD)
+I (..\..\..\..\driver\inc\atim3.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+F (..\..\..\..\driver\src\flash.c)(0x64DD6E76)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/flash.o -MMD)
+I (..\..\..\..\driver\inc\flash.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+F (..\..\..\..\driver\src\lpuart.c)(0x6945F225)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/lpuart.o -MMD)
+I (..\..\..\..\driver\inc\lpuart.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+F (..\..\..\..\driver\src\wwdt.c)(0x64DD6E76)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/wwdt.o -MMD)
+I (..\..\..\..\driver\inc\wwdt.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+F (..\..\..\..\driver\src\adc.c)(0x64DD6E76)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../../../mcu/common -I ../source -I ../../../../driver/inc-I./RTE/_gpio_inout_Release-ID:/Keil/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/Keil/Arm/Packs/HDSC/HC32F002/1.0.0/Device/Include-D__UVISION_VERSION="543" -D_RTE_-o ./output/release/adc.o -MMD)
+I (..\..\..\..\driver\inc\adc.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\ddl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\base_types.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\board_stkhc32f002.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\hc32f002.h)(0x64DD6E76)
+I (D:\Keil\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include\core_cm0plus.h)(0x6895F233)
+I (..\..\..\..\mcu\common\system_hc32f002.h)(0x64DD6E76)
+I (..\..\..\..\driver\inc\sysctrl.h)(0x64DD6E76)
+I (..\..\..\..\mcu\common\interrupts_hc32f002.h)(0x64DD6E76)
+I (..\source\ddl_device.h)(0x64DD6E78)
+F (..\readme.txt)(0x64DD6E78)()

@@ -1,0 +1,108 @@
+/******************************************************************************
+ * Copyright (C) 2021, Xiaohua Semiconductor Co., Ltd. All rights reserved.
+ *
+ * This software component is licensed by XHSC under BSD 3-Clause license
+ * (the "License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at:
+ *                    opensource.org/licenses/BSD-3-Clause
+ *
+ ******************************************************************************/
+
+/******************************************************************************
+ * @file   main.c
+ *
+ * @brief  Source file for GPIO example
+ *
+ * @author MADS Team 
+ *
+ ******************************************************************************/
+
+/******************************************************************************
+ * Include files
+ ******************************************************************************/
+#include "gpio.h"
+
+/******************************************************************************
+ * Local pre-processor symbols/macros ('#define')
+ ******************************************************************************/
+
+/******************************************************************************
+ * Global variable definitions (declared in header file with 'extern')
+ ******************************************************************************/
+
+/******************************************************************************
+ * Local type definitions ('typedef')
+ ******************************************************************************/
+
+/******************************************************************************
+ * Local function prototypes ('static')
+ ******************************************************************************/
+
+/******************************************************************************
+ * Local variable definitions ('static')                                      *
+ ******************************************************************************/
+
+/******************************************************************************
+ * Local pre-processor symbols/macros ('#define')
+ ******************************************************************************/
+
+/*****************************************************************************
+ * Function implementation - global ('extern') and local ('static')
+ ******************************************************************************/
+
+/**
+ ******************************************************************************
+ ** \brief  Main function of project
+ **
+ ** \return uint32_t return value, if needed
+ **
+ ** This sample
+ **
+ ******************************************************************************/
+int main(void)
+{
+    stc_gpio_init_t stcGpioInit = {0};
+    
+    ///< 外设时钟使能
+    SYSCTRL_PeriphClkEnable(SYSCTRL_PERICLK_PB);
+    
+    ///< LED端口初始化
+    stcGpioInit.u32Mode = GPIO_MODE_OUTPUT_PP;
+    stcGpioInit.u32Pin  = STK_LED_PIN;
+    stcGpioInit.u32Pull = GPIO_PULL_NONE;
+    GPIOB_Init(&stcGpioInit);
+    
+    ///< USER KEY端口初始化
+    stcGpioInit.u32Mode = GPIO_MODE_INPUT | GPIO_MODE_EXTI;
+    stcGpioInit.u32Pin  = STK_USERKEY_PIN;
+    stcGpioInit.u32ExtI = GPIO_EXTI_RISING_FALLING;
+    GPIOB_Init(&stcGpioInit);
+    
+    ///< NVIC 中断使能
+    EnableNvic(PORTB_IRQn, IrqLevel0, TRUE);
+    
+    while(1)
+    {
+        STK_LED_OFF();
+    }    
+    
+}
+
+void PortB_IRQHandler(void)
+{
+    if(STK_USERKEY_PIN | GPIO_ExtIrqStateGet(GPIOB,STK_USERKEY_PIN))
+    {
+        GPIO_ExtIrqStateClear(GPIOB,STK_USERKEY_PIN);
+
+        STK_LED_ON();
+        delay1ms(200);
+    }
+}
+
+
+
+/******************************************************************************
+ * EOF (not truncated)
+ ******************************************************************************/
+
+
