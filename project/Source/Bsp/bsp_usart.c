@@ -67,10 +67,9 @@ void bsp_usart_tx(uint8_t *data, uint16_t len)
     while (!LPUART_GetFlag(LPUART1, LPUART_FLAG_TC)) {
         ;
     }
-    LPUART_ClearIrq(LPUART1, LPUART_FLAG_TC);
     LPUART_EnableIrq(LPUART1, LPUART_INT_RC); // 启用接收中断
-
     rx1_buf.length = 0;
+    delay1ms(1); // 短暂延时,防止丢字节
     RD_RESET;
 }
 

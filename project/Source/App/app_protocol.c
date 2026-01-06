@@ -1,28 +1,43 @@
 #include "app_protocol.h"
+#include <stdbool.h>
 #include "../Source/Bsp/bsp_usart.h"
+#include "../Source/App/app_timer.h"
 #include "../Source/Dev/dev_config.h"
+#include "../Source/Bsp/bsp_595/bsp_595.h"
 
 // 函数声明
 static uint8_t app_panel_frame_crc(uint8_t *rxbuf, uint8_t len);
 static void app_protocol_panel_check(usart1_rx_buf_t *buf);
+static void app_delay_apply_addr(void *arg);
 
-static dev_panel_callback panel_callback = NULL;
-void app_protocol_callback(dev_panel_callback callback)
+static dev_protocol_callback protocol_callback = NULL;
+static dev_event_callback event_callback       = NULL;
+
+void app_protocol_callback(dev_protocol_callback callback)
 {
-    panel_callback = callback;
+    protocol_callback = callback;
+}
+
+void app_evnet_callback(dev_event_callback callback)
+{
+    event_callback = callback;
 }
 
 static panel_frame_t my_panel_frame;
 static panel_info_t my_panel_info;
+
+static bool apply_addr;
+
 void app_protocol_init(void)
 {
+    apply_addr = false;
     bsp_usart1_rx_callback(app_protocol_panel_check);
 }
 
 // 检查数据合法性
 static void app_protocol_panel_check(usart1_rx_buf_t *buf)
 {
-    if (!buf || buf->length < 4) return; // 最小帧长度 FF AA ?? 0D 0A
+    if (!buf || buf->length < 4) return; // 最小帧长度 FF AA ?? 0D 0A(通信帧) 或 C0 0E 0E 0E 0E(群发地址帧) 或 1B 2C 00 3D(单发地址帧)
 
     uint16_t frame_len = 0; // 完整帧长度
 
@@ -33,12 +48,46 @@ static void app_protocol_panel_check(usart1_rx_buf_t *buf)
         if (buf->buffer[i] == PANEL_FRAME_RX_HEAD_1 && buf->buffer[i + 1] == PANEL_FRAME_RX_HEAD_2) {
             break; // 找到帧头
         }
+        if (i + PANEL_SET_ADDR_FRAME_LEN <= buf->length) { // 软件批量设置地址帧
+            APP_PRINTF_BUF("buf", buf->buffer, buf->length);
+            if (buf->buffer[i + 1] == PANEL_SET_ADDR_HEAD &&
+                buf->buffer[i + 2] == PANEL_SET_ADDR_HEAD &&
+                buf->buffer[i + 3] == PANEL_SET_ADDR_HEAD &&
+                buf->buffer[i + 4] == PANEL_SET_ADDR_HEAD &&
+                buf->buffer[i + (PANEL_SET_ADDR_FRAME_LEN - 1)] == PANEL_SET_ADDR_TAIL) {
+                uint8_t addr = buf->buffer[i] - 0xC0;
+
+                static event_t temp_event;
+                temp_event.data   = &addr;
+                temp_event.length = sizeof(addr);
+                if (event_callback) {
+                    event_callback(SET_ADDR, &temp_event);
+                }
+                return;
+            }
+        }
+        if (apply_addr == true) { // 软件单发地址帧
+            if (buf->buffer[i] == 0x1B && buf->buffer[i + 1] == 0x2C && buf->buffer[i + 3] == 0x3D) {
+
+                uint8_t addr = buf->buffer[i + 2];
+
+                static event_t temp_event;
+                temp_event.data   = &addr;
+                temp_event.length = sizeof(addr);
+
+                if (event_callback) {
+                    event_callback(SET_ADDR, &temp_event);
+                }
+                return;
+            }
+        }
     }
     if (i + 1 >= buf->length) { // 没找到帧头,整包数据无效
         buf->length = 0;
         return;
     }
     for (j = i + 2; j + 1 < buf->length; j++) { // 从帧头的下一个字节开始查找帧尾
+
         if (buf->buffer[j] == PANEL_FRAME_RX_TAIL_1 && buf->buffer[j + 1] == PANEL_FRAME_RX_TAIL_2) {
             break; // 找到完整帧尾
         }
@@ -84,8 +133,8 @@ static void app_protocol_panel_check(usart1_rx_buf_t *buf)
 
     APP_PRINTF("my_panel_info:%02X\n", my_panel_info.addr);
 
-    if (panel_callback) { // 回调到 dev_panel 设备处理
-        panel_callback(&my_panel_info);
+    if (protocol_callback) { // 回调到 dev_panel 设备处理
+        protocol_callback(&my_panel_info);
     }
 }
 
@@ -122,6 +171,26 @@ void app_protocol_build(uint8_t level, uint8_t status, uint8_t key_num)
     my_panel_frame.length = 12;
     APP_PRINTF_BUF("tx", my_panel_frame.data, my_panel_frame.length);
     bsp_usart_tx(my_panel_frame.data, my_panel_frame.length);
+}
+
+void app_send_to_software(void)
+{
+    // 向上位机软件发送获取地址帧
+    uint8_t send_array[3];
+    send_array[0] = 0xB1;
+    send_array[1] = 0xB2;
+    send_array[2] = 0xB3;
+
+    apply_addr = true; // 本设备发送了申请地址请求
+    app_timer_start(100, app_delay_apply_addr, false, NULL, "apply");
+
+    bsp_usart_tx(send_array, sizeof(send_array));
+}
+
+static void app_delay_apply_addr(void *arg)
+{
+    apply_addr = false; // 等待上位机回复的窗口期
+    APP_PRINTF("apply_addr is false\n");
 }
 
 static uint8_t app_panel_frame_crc(uint8_t *rxbuf, uint8_t len)

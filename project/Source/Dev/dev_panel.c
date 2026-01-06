@@ -10,6 +10,8 @@
 #include "../Source/Bsp/bsp_595/bsp_595.h"
 
 #if defined PANEL
+#define LONG_PRESS   60  // 长按时间 3s (按键需要填充电压buf,故而每 5*10 ms 检测一次)
+#define FILCK_COUNT  100 // 闪烁时间 500ms
 
 #define VOL_BUF_SIZE 10  // 电压值缓冲区数量
 #define MIN_VOL      495 // 无按键按下时的最小电压值
@@ -65,7 +67,8 @@ static panel_status_t my_panel_status[KEY_NUMBER] = {
 // 函数声明
 static void dev_panel_read_adc(void *arg);
 static uint8_t dev_panel_key_to_bit(void);
-static void dev_panel_parse(panel_info_t *info);
+static void dev_protocol_parse(panel_info_t *info);
+static void dev_event_parse(event_e event, event_t *event_data);
 static void dev_panel_bit_to_key(uint8_t key_bit);
 
 void dev_panel_init(void)
@@ -74,23 +77,18 @@ void dev_panel_init(void)
     bsp_adc_init();
     bsp_595_init();
     bsp_595_output(0x00, 0xFF);
-    app_timer_start(1, dev_panel_read_adc, true, NULL, "read_adc");
+    app_timer_start(5, dev_panel_read_adc, true, NULL, "read_adc");
 
-    uint8_t data = 0x00;
-    dev_config_save(&data, 1);
     dev_config_load();
-    uint8_t load;
-
-    load = dev_get_config()->dev_addr;
-    APP_PRINTF("load:%02X\n", load);
-    app_protocol_callback(dev_panel_parse);
+    app_protocol_callback(dev_protocol_parse);
+    app_evnet_callback(dev_event_parse);
 }
 
 static void dev_panel_read_adc(void *arg)
 {
     uint16_t adc_value = bsp_get_adc();
     // APP_PRINTF("%d\n", adc_value);
-    for (uint8_t i = 0; i < KEY_NUMBER; i++) {
+    for (uint8_t i = 0; i < KEY_NUMBER; i++) { // 处理按键
 
         if (adc_value < my_panel_status[i].vol_range.min || adc_value > my_panel_status[i].vol_range.max) {
             if (adc_value >= MIN_VOL && adc_value <= MAX_VOL) {
@@ -105,7 +103,7 @@ static void dev_panel_read_adc(void *arg)
         if (my_adc_value.buf_idx < VOL_BUF_SIZE) {
             continue;
         }
-        my_adc_value.buf_idx = 0; // vol_buf is fill
+        my_adc_value.buf_idx = 0; // vol_buf is full
 
         uint16_t new_value = app_calculate_average(my_adc_value.vol_buf, VOL_BUF_SIZE);
         if (new_value < my_panel_status[i].vol_range.min || new_value > my_panel_status[i].vol_range.max) {
@@ -118,6 +116,26 @@ static void dev_panel_read_adc(void *arg)
             app_protocol_build(0, my_common_panel.key_status, i);
             delay1ms(50);
             my_panel_status[i].k_press = true;
+
+            my_common_panel.key_long_press = true;
+            my_common_panel.key_long_count = 0;
+        }
+        if (my_common_panel.key_long_press && ++my_common_panel.key_long_count >= LONG_PRESS) { // 处理长按
+            APP_PRINTF("long press\n");
+            app_send_to_software();
+            my_common_panel.key_long_press = false;
+        }
+    }
+
+    if (my_common_panel.led_filck) { // 处理闪烁
+        if (my_common_panel.led_filck_count == 0) {
+            bsp_595_output(0xFF, 0x00);
+        }
+        my_common_panel.led_filck_count++;
+        if (my_common_panel.led_filck_count >= FILCK_COUNT) {
+            bsp_595_output(0x00, 0xFF);
+            my_common_panel.led_filck       = false;
+            my_common_panel.led_filck_count = 0;
         }
     }
 }
@@ -140,7 +158,7 @@ static void dev_panel_bit_to_key(uint8_t key_bit)
     }
 }
 
-static void dev_panel_parse(panel_info_t *info)
+static void dev_protocol_parse(panel_info_t *info)
 {
     uint8_t y_status = (~info->addr);
 
@@ -150,4 +168,20 @@ static void dev_panel_parse(panel_info_t *info)
     dev_panel_bit_to_key(my_common_panel.key_status);
 }
 
+static void dev_event_parse(event_e event, event_t *event_data)
+{
+    switch (event) {
+        case SET_ADDR: {
+            uint8_t addr = *(uint8_t *)event_data->data;
+            if (addr < PANEL_ADDR_MAX) {
+                dev_config_save(&addr, sizeof(addr));
+                my_common_panel.led_filck = true;
+            } else {
+                APP_ERROR("addr is too large");
+            }
+        } break;
+        default:
+            return;
+    }
+}
 #endif

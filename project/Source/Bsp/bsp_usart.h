@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "lpuart.h"
 
-#define APP_DEBUG // 此宏用来管理整个工程的 debug 信息
+// #define APP_DEBUG // 此宏用来管理整个工程的 debug 信息
 
 #if defined APP_DEBUG
 #define APP_PRINTF(...) printf(__VA_ARGS__)

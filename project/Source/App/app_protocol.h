@@ -14,8 +14,23 @@
 #define PANEL_FRAME_RX_SUB_LEN  11   // 子帧长度
 #define PANEL_FRAME_RX_ADDR_LEN 8    // 子帧中的地址个数
 
-#define PANEL_FRAME_RX_TAIL_1   0x0D
-#define PANEL_FRAME_RX_TAIL_2   0x0A
+// 设置软件下发地址
+#define PANEL_SET_ADDR_HEAD      0X0E
+#define PANEL_SET_ADDR_TAIL      0xB0
+#define PANEL_SET_ADDR_FRAME_LEN 0x22
+
+#define PANEL_FRAME_RX_TAIL_1    0x0D
+#define PANEL_FRAME_RX_TAIL_2    0x0A
+
+typedef enum {
+
+    SET_ADDR,
+} event_e;
+
+typedef struct {
+    uint8_t *data;
+    uint8_t length;
+} event_t;
 
 typedef struct
 {
@@ -32,10 +47,14 @@ typedef struct
 
 } panel_info_t;
 
-typedef void (*dev_panel_callback)(panel_info_t *);
-void app_protocol_callback(dev_panel_callback callback);
+typedef void (*dev_protocol_callback)(panel_info_t *);
+void app_protocol_callback(dev_protocol_callback callback);
+
+typedef void (*dev_event_callback)(event_e event, event_t *event_data);
+void app_evnet_callback(dev_event_callback callback);
 
 void app_protocol_init(void);
+void app_send_to_software(void);
 void app_protocol_build(uint8_t level, uint8_t status, uint8_t key_num);
 
 #endif

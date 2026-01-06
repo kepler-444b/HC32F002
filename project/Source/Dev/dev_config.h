@@ -4,6 +4,9 @@
 #include <stdint.h>
 
 #if defined PANEL_A13
+
+#define PANEL_ADDR_MAX 32
+
 #define PANEL_VOL_RANGE_DEF          \
     [0] = {.vol_range = {0, 5}},     \
     [1] = {.vol_range = {50, 55}},   \
