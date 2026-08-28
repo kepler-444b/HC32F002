@@ -63,10 +63,12 @@ static common_panel_t my_common_panel;
 static panel_status_t my_panel_status[KEY_NUMBER] = {
     PANEL_VOL_RANGE_DEF,
 };
+static uint8_t y_status = 0xFF;
 
 // 函数声明
 static void dev_panel_read_adc(void *arg);
 static uint8_t dev_panel_key_to_bit(void);
+static void dev_panel_key_filck(uint8_t key_num);
 static void dev_protocol_parse(panel_info_t *info);
 static void dev_event_parse(event_e event, event_t *event_data);
 static void dev_panel_bit_to_key(uint8_t key_bit);
@@ -110,11 +112,11 @@ static void dev_panel_read_adc(void *arg)
             continue; // 检查平均值是否在有效范围
         }
         if (!my_panel_status[i].k_press && !my_common_panel.enter_config) { // 处理按键按下
-            my_panel_status[i].k_status ^= 1;
 
             my_common_panel.key_status = dev_panel_key_to_bit();
+
+            dev_panel_key_filck(i);
             app_protocol_build(0, my_common_panel.key_status, i);
-            delay1ms(50);
             my_panel_status[i].k_press = true;
 
             my_common_panel.key_long_press = true;
@@ -122,7 +124,7 @@ static void dev_panel_read_adc(void *arg)
         }
         if (my_common_panel.key_long_press && ++my_common_panel.key_long_count >= LONG_PRESS) { // 处理长按
             APP_PRINTF("long press\n");
-            app_send_to_software();
+            app_send_to_software(SET_ADDR_SINGLE);
             my_common_panel.key_long_press = false;
         }
     }
@@ -140,14 +142,46 @@ static void dev_panel_read_adc(void *arg)
     }
 }
 
-// 打包按键状态为位字段
+// 打包按键状态为位字段(将面板的每个按键的状态,打包成一个字节)
 static uint8_t dev_panel_key_to_bit(void)
 {
     uint8_t key_bit = 0;
     for (uint8_t i = 0; i < KEY_NUMBER; i++) {
-        key_bit |= (my_panel_status[i].k_status & 1) << i;
+        key_bit |= !(my_panel_status[i].k_status & 1) << i; // 取非,即k_status的状态1->0,0->1;
     }
     return key_bit;
+}
+
+// 单个按键闪烁
+static void dev_panel_key_filck(uint8_t key_num)
+{
+#if 0
+    y_status &= ~(1 << key_num);
+    bsp_595_output(~y_status, y_status);
+    delay1ms(50);
+    y_status |= (1 << key_num);
+    bsp_595_output(~y_status, y_status);
+#endif
+
+    uint8_t mask = (1 << key_num);
+
+    if (y_status & mask) { // 当前是亮
+
+        y_status &= ~mask; // 灭一下
+        bsp_595_output(~y_status, y_status);
+        delay1ms(50);
+
+        y_status |= mask; // 恢复亮
+        bsp_595_output(~y_status, y_status);
+    } else { // 当前是灭
+
+        y_status |= mask; // 亮一下
+        bsp_595_output(~y_status, y_status);
+        delay1ms(50);
+
+        y_status &= ~mask; // 恢复灭
+        bsp_595_output(~y_status, y_status);
+    }
 }
 
 // 根据位字段更新按键状态
@@ -160,11 +194,18 @@ static void dev_panel_bit_to_key(uint8_t key_bit)
 
 static void dev_protocol_parse(panel_info_t *info)
 {
-    uint8_t y_status = (~info->addr);
+    y_status = (~info->addr); // 设置黄灯状态
 
     bsp_595_output(info->addr, y_status);
 
     my_common_panel.key_status = info->addr;
+
+    // 从 key_status 提取每一个按键的状态
+    // key_status 的某一位为0,则其相应的按键 k_status 状态为1
+    for (uint8_t i = 0; i < KEY_NUMBER; i++) {
+        my_panel_status[i].k_status = !((my_common_panel.key_status >> i) & 0x01);
+    }
+
     dev_panel_bit_to_key(my_common_panel.key_status);
 }
 
@@ -174,12 +215,20 @@ static void dev_event_parse(event_e event, event_t *event_data)
         case SET_ADDR: {
             uint8_t addr = *(uint8_t *)event_data->data;
             if (addr < PANEL_ADDR_MAX) {
-                dev_config_save(&addr, sizeof(addr));
                 my_common_panel.led_filck = true;
+                dev_config_save(&addr, sizeof(addr));
+
             } else {
                 APP_ERROR("addr is too large");
             }
         } break;
+        case SET_RESET: {
+            __NVIC_SystemReset();
+        } break;
+        case GET_INFO: {
+            my_common_panel.led_filck = true;
+            break;
+        }
         default:
             return;
     }

@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #if defined PANEL_A13
+#define DEV_VER        1
 
 #define PANEL_ADDR_MAX 32
 
@@ -17,8 +18,7 @@
 
 #endif
 
-typedef struct
-{
+typedef struct{
     uint8_t dev_addr;
 } panel_cfg_t;
 

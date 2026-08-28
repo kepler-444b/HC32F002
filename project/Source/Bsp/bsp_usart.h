@@ -2,9 +2,10 @@
 #define _USART_H_
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "lpuart.h"
 
-// #define APP_DEBUG // 此宏用来管理整个工程的 debug 信息
+#define APP_DEBUG // 此宏用来管理整个工程的 debug 信息
 
 #if defined APP_DEBUG
 #define APP_PRINTF(...) printf(__VA_ARGS__)
@@ -28,10 +29,22 @@
 
 #define UART1_RECV_SIZE 256
 
+#define FRAME_HEAD_1    0xFF
+#define FRAME_HEAD_2    0xAA
+#define FRAME_TAIL_1    0x0D
+#define FRAME_TAIL_2    0x0A
+
+typedef enum {
+    WAIT_HEAD1, // 等 0xFF
+    WAIT_HEAD2, // 等 0xAA
+    RECEIVING   // 收数据直到帧尾
+} uart_state_t;
+
 typedef struct
 {
     uint8_t buffer[UART1_RECV_SIZE];
     uint16_t length;
+    volatile bool is_completed;
 } usart1_rx_buf_t;
 
 typedef void (*usart_rx1_callback_t)(usart1_rx_buf_t *);

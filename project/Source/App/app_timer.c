@@ -17,12 +17,13 @@ void app_timer_init(void)
     SYSCTRL_FuncEnable(SYSCTRL_FUNC_GTIMCONFIG);
     SYSCTRL_PeriphClkEnable(SYSCTRL_PERIRESET_GTIM);
 
-    stcInitCfg.u32TaskMode  = BTIM_TASK_MODE_CONTINUOUS_COUNTER; // 连续计数模式
-    stcInitCfg.u32WorkMode  = BTIM_WORK_MODE_PCLK;               // 计数时钟源 = PCLK
-    stcInitCfg.u32Prescaler = BTIM_COUNTER_CLK_DIV8;             // 预分频 8
-    stcInitCfg.u32ToggleEn  = BTIM_TOGGLE_DISABLE;               // TOG 输出不使能
+    stcInitCfg.u32TaskMode = BTIM_TASK_MODE_CONTINUOUS_COUNTER; // 连续计数模式
+    stcInitCfg.u32WorkMode = BTIM_WORK_MODE_PCLK;               // 计数时钟源 = PCLK
 
-    stcInitCfg.u32AutoReloadVal = 4000 - 1; // 自动重载寄存ARR赋值
+    stcInitCfg.u32Prescaler = BTIM_COUNTER_CLK_DIV8; // 预分频 8
+    stcInitCfg.u32ToggleEn  = BTIM_TOGGLE_DISABLE;   // TOG 输出不使能
+
+    stcInitCfg.u32AutoReloadVal = 3000 - 1; // 自动重载寄存ARR赋值
     Btim_Init(BTIM3, &stcInitCfg);
 
     Btim_ClearFlag(BTIM3, BTIM_IT_CLR_UI); // 清除溢出中断标志位
@@ -44,20 +45,17 @@ timer_error_e app_timer_start(uint32_t interval_ms, SoftTimerCallback callback, 
     }
     int id = find_free_timer();
     if (id >= 0) {
-        my_soft_timer[id] = (soft_timer_t){
-            .state       = TIMER_STATE_ACTIVE,
-            .repeat      = repeat,
-            .start_time  = system_ticks,
-            .interval_ms = interval_ms,
-            .callback    = callback,
-            .user_arg    = arg};
+        memset(&my_soft_timer[id], 0, sizeof(soft_timer_t)); // 清零结构体
+        my_soft_timer[id].state       = TIMER_STATE_ACTIVE;
+        my_soft_timer[id].repeat      = repeat;
+        my_soft_timer[id].start_time  = system_ticks;
+        my_soft_timer[id].interval_ms = interval_ms;
+        my_soft_timer[id].callback    = callback;
+        my_soft_timer[id].user_arg    = arg;
 
-        // 设置定时器名称
         if (name && name[0] != '\0') {
             strncpy(my_soft_timer[id].name, name, MAX_TIMER_NAME_LEN - 1);
             my_soft_timer[id].name[MAX_TIMER_NAME_LEN - 1] = '\0';
-        } else {
-            my_soft_timer[id].name[0] = '\0';
         }
     }
 
@@ -86,20 +84,30 @@ bool app_timer_is_active(const char *name)
 
 void app_timer_poll(void)
 {
+    uint32_t now = system_ticks;
+
     for (int i = 0; i < MAX_SOFT_TIMERS; i++) {
-        if (my_soft_timer[i].state == TIMER_STATE_PENDING) {
-            // 执行回调
-            if (my_soft_timer[i].callback) {
-                my_soft_timer[i].callback(my_soft_timer[i].user_arg);
+        if (my_soft_timer[i].state != TIMER_STATE_PENDING)
+            continue;
+
+        // 执行回调
+        if (my_soft_timer[i].callback) {
+            my_soft_timer[i].callback(my_soft_timer[i].user_arg);
+        }
+
+        // 更新状态和 start_time
+        if (my_soft_timer[i].repeat) {
+            // 累积间隔，减少误差
+            my_soft_timer[i].start_time += my_soft_timer[i].interval_ms;
+
+            // 如果已经严重滞后（poll 很久没调用），也修正 start_time
+            if ((int32_t)(now - my_soft_timer[i].start_time) >= (int32_t)my_soft_timer[i].interval_ms) {
+                my_soft_timer[i].start_time = now;
             }
 
-            // 更新状态和 start_time
-            if (my_soft_timer[i].repeat) {
-                my_soft_timer[i].start_time = system_ticks; // 在 poll 中更新 start_time
-                my_soft_timer[i].state      = TIMER_STATE_ACTIVE;
-            } else {
-                my_soft_timer[i].state = TIMER_STATE_INACTIVE;
-            }
+            my_soft_timer[i].state = TIMER_STATE_ACTIVE;
+        } else {
+            my_soft_timer[i].state = TIMER_STATE_INACTIVE;
         }
     }
 }
@@ -143,18 +151,17 @@ void BTim3_IRQHandler(void)
 {
     if (TRUE == Btim_IsActiveFlag(BTIM3, BTIM_IT_FLAG_UI)) {
         system_ticks++;
-        // 遍历定时器,标记到期事件
+
         for (uint8_t i = 0; i < MAX_SOFT_TIMERS; i++) {
             if (my_soft_timer[i].state != TIMER_STATE_ACTIVE)
                 continue;
 
-            uint32_t elapsed = system_ticks - my_soft_timer[i].start_time; // 计算已经过去的时间
-            if (elapsed >= my_soft_timer[i].interval_ms) {                 // 如果已经超过定时时间间隔
-                if (my_soft_timer[i].state != TIMER_STATE_PENDING) {
-                    my_soft_timer[i].state = TIMER_STATE_PENDING; // 标记为TIMER_STATE_PENDING(待执行)
-                }
+            uint32_t elapsed = system_ticks - my_soft_timer[i].start_time;
+            if (elapsed >= my_soft_timer[i].interval_ms) {
+                my_soft_timer[i].state = TIMER_STATE_PENDING;
             }
         }
-        Btim_ClearFlag(BTIM3, BTIM_IT_CLR_UI); // 清除GTIM的溢出中断标志位
+
+        Btim_ClearFlag(BTIM3, BTIM_IT_CLR_UI);
     }
 }

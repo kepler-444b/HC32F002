@@ -28,15 +28,14 @@ typedef enum {
  */
 typedef void (*SoftTimerCallback)(void *arg);
 
-typedef struct
-{
-    volatile timer_state_e state;  ///< 定时器状态（中断/主程序共享）
-    volatile uint32_t start_time;  ///< 定时器启动时间（中断读取，poll更新）
-    bool repeat;                   ///< 是否循环定时
-    uint32_t interval_ms;          ///< 定时器间隔(ms)
-    SoftTimerCallback callback;    ///< 回调函数
-    void *user_arg;                ///< 用户参数
-    char name[MAX_TIMER_NAME_LEN]; ///< 定时器名称
+typedef struct {
+    volatile uint8_t state;        // 定时器状态
+    uint32_t start_time;           // 起始时间
+    uint32_t interval_ms;          // 时间间隔
+    bool repeat;                   // 是否重复
+    SoftTimerCallback callback;    // 回调函数
+    void *user_arg;                // 用户参数
+    char name[MAX_TIMER_NAME_LEN]; // 定时器名称
 } soft_timer_t;
 
 // 初始化定时器模块

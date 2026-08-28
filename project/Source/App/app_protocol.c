@@ -5,6 +5,11 @@
 #include "../Source/Dev/dev_config.h"
 #include "../Source/Bsp/bsp_595/bsp_595.h"
 
+// 设备重启命令
+static uint8_t reset_cmd[6] = {0xFE, 0x72, 0x65, 0x73, 0x65, 0x74};
+// 设置单个地址
+static uint8_t set_addr_head[4] = {0X0E, 0X0E, 0X0E, 0X0E}; // 批量设置设备地址帧头
+
 // 函数声明
 static uint8_t app_panel_frame_crc(uint8_t *rxbuf, uint8_t len);
 static void app_protocol_panel_check(usart1_rx_buf_t *buf);
@@ -23,8 +28,8 @@ void app_evnet_callback(dev_event_callback callback)
     event_callback = callback;
 }
 
-static panel_frame_t my_panel_frame;
-static panel_info_t my_panel_info;
+static panel_frame_t my_panel_frame = {0};
+static panel_info_t my_panel_info   = {0};
 
 static bool apply_addr;
 
@@ -37,108 +42,86 @@ void app_protocol_init(void)
 // 检查数据合法性
 static void app_protocol_panel_check(usart1_rx_buf_t *buf)
 {
-    if (!buf || buf->length < 4) return; // 最小帧长度 FF AA ?? 0D 0A(通信帧) 或 C0 0E 0E 0E 0E(群发地址帧) 或 1B 2C 00 3D(单发地址帧)
-
-    uint16_t frame_len = 0; // 完整帧长度
-
-    uint16_t i = 0; // 扫描索引,查找帧头
-    uint16_t j = 0; // 查找帧尾索引
-
-    for (i = 0; i + 1 < buf->length; i++) { // 查找帧头
-        if (buf->buffer[i] == PANEL_FRAME_RX_HEAD_1 && buf->buffer[i + 1] == PANEL_FRAME_RX_HEAD_2) {
-            break; // 找到帧头
-        }
-        if (i + PANEL_SET_ADDR_FRAME_LEN <= buf->length) { // 软件批量设置地址帧
-            APP_PRINTF_BUF("buf", buf->buffer, buf->length);
-            if (buf->buffer[i + 1] == PANEL_SET_ADDR_HEAD &&
-                buf->buffer[i + 2] == PANEL_SET_ADDR_HEAD &&
-                buf->buffer[i + 3] == PANEL_SET_ADDR_HEAD &&
-                buf->buffer[i + 4] == PANEL_SET_ADDR_HEAD &&
-                buf->buffer[i + (PANEL_SET_ADDR_FRAME_LEN - 1)] == PANEL_SET_ADDR_TAIL) {
-                uint8_t addr = buf->buffer[i] - 0xC0;
-
-                static event_t temp_event;
-                temp_event.data   = &addr;
-                temp_event.length = sizeof(addr);
-                if (event_callback) {
-                    event_callback(SET_ADDR, &temp_event);
-                }
-                return;
-            }
-        }
-        if (apply_addr == true) { // 软件单发地址帧
-            if (buf->buffer[i] == 0x1B && buf->buffer[i + 1] == 0x2C && buf->buffer[i + 3] == 0x3D) {
-
-                uint8_t addr = buf->buffer[i + 2];
-
-                static event_t temp_event;
-                temp_event.data   = &addr;
-                temp_event.length = sizeof(addr);
-
-                if (event_callback) {
-                    event_callback(SET_ADDR, &temp_event);
-                }
-                return;
-            }
-        }
-    }
-    if (i + 1 >= buf->length) { // 没找到帧头,整包数据无效
-        buf->length = 0;
-        return;
-    }
-    for (j = i + 2; j + 1 < buf->length; j++) { // 从帧头的下一个字节开始查找帧尾
-
-        if (buf->buffer[j] == PANEL_FRAME_RX_TAIL_1 && buf->buffer[j + 1] == PANEL_FRAME_RX_TAIL_2) {
-            break; // 找到完整帧尾
-        }
-    }
-    if (j + 1 >= buf->length) { // 没找到完整帧尾,整包数据无效
-        buf->length = 0;
-        return;
-    }
-
-    frame_len = j + 2 - i; // 帧长度 = (最后一个字节索引) - (帧头索引) + 1,最后一个字节为 j + 1(帧尾第二字节)  => frame_len = (j + 1) - i + 1 = j + 2 - i
-
-    memmove(&buf->buffer[0], &buf->buffer[i], frame_len);
-    buf->length = frame_len; // 更新有效帧长度
-
-    if (buf->buffer[0] != PANEL_FRAME_RX_HEAD_1 || buf->buffer[1] != PANEL_FRAME_RX_HEAD_2) {
-        APP_ERROR("panel frame");
-        return;
-    }
-    if (buf->length > UART1_RECV_SIZE) {
-        APP_ERROR("panel frame too long");
-        return;
-    }
-    if (app_panel_frame_crc(&buf->buffer[4], buf->buffer[2]) != buf->buffer[buf->length - 3]) {
-        APP_ERROR("panel frame crc");
-        return;
-    }
-    // APP_PRINTF_BUF("buf", buf->buffer, buf->length);
-
-    // 查找本设备的 addr bl reserve
+    uint8_t data_type     = buf->buffer[3];
+    uint16_t data_length  = buf->buffer[2];
     const uint8_t my_addr = dev_get_config()->dev_addr;
 
-    uint8_t length   = buf->buffer[2];
-    uint8_t sub_idx  = my_addr / PANEL_FRAME_RX_ADDR_LEN; // 在哪个 sub_frame 中
-    uint8_t addr_idx = my_addr % PANEL_FRAME_RX_ADDR_LEN; // 在该 sub_frame 中的第几个地址
+    switch (data_type) {
+        case SET_STATE: { // 设置面板状态
 
-    uint8_t sub_start = 4 + sub_idx * PANEL_FRAME_RX_SUB_LEN; // 子帧起始地址索引
+            uint8_t length   = buf->buffer[2];
+            uint8_t sub_idx  = my_addr / PANEL_FRAME_RX_ADDR_LEN; // 在哪个 sub_frame 中
+            uint8_t addr_idx = my_addr % PANEL_FRAME_RX_ADDR_LEN; // 在该 sub_frame 中的第几个地址
 
-    memset(&my_panel_info, 0, sizeof(my_panel_info));
-    my_panel_info.addr  = buf->buffer[sub_start + addr_idx];
-    my_panel_info.bl    = buf->buffer[sub_start + 8];
-    my_panel_info.res_1 = buf->buffer[sub_start + 9];
-    my_panel_info.res_2 = buf->buffer[sub_start + 10];
+            APP_PRINTF("sub_idx:%d addr_idx:%d", sub_idx, addr_idx);
+            APP_PRINTF("my_addr:%d sub_idx:%d addr_idx:%d\n", my_addr, sub_idx, addr_idx);
+            uint8_t sub_start = 4 + sub_idx * PANEL_FRAME_RX_SUB_LEN; // 子帧起始地址索引
 
-    APP_PRINTF("my_panel_info:%02X\n", my_panel_info.addr);
+            memset(&my_panel_info, 0, sizeof(my_panel_info));
+            my_panel_info.addr    = buf->buffer[sub_start + (addr_idx * 2)];
+            my_panel_info.reserve = buf->buffer[sub_start + (addr_idx * 2) + 1];
 
-    if (protocol_callback) { // 回调到 dev_panel 设备处理
-        protocol_callback(&my_panel_info);
+            my_panel_info.bl    = buf->buffer[sub_start + 16];
+            my_panel_info.res_1 = buf->buffer[sub_start + 17];
+            my_panel_info.res_2 = buf->buffer[sub_start + 18];
+
+            APP_PRINTF("my_panel_info:%02X\n", my_panel_info.addr);
+
+            if (protocol_callback) { // 回调到 dev_panel 设备处理
+                protocol_callback(&my_panel_info);
+            }
+        } break;
+        case SET_ADDR_SINGLE: { // 接收到了上位机对"单发地址"的回复
+            if (!apply_addr) return;
+            if (data_length != 3) return;
+            if (buf->buffer[4] != 0x1B || buf->buffer[5] != 0x2C) return;
+
+            uint8_t addr = buf->buffer[6];
+            static event_t temp_event;
+            temp_event.data   = &addr;
+            temp_event.length = sizeof(addr);
+
+            if (event_callback) {
+                event_callback(SET_ADDR, &temp_event);
+            }
+            break;
+        }
+        case SET_ADDR_BATCH: { // 群发地址
+            APP_PRINTF_BUF("buf", buf->buffer, buf->length);
+            if (data_length != 3) return;
+            uint8_t addr = buf->buffer[6];
+            static event_t temp_event;
+            temp_event.data   = &addr;
+            temp_event.length = sizeof(addr);
+
+            if (event_callback) {
+                event_callback(SET_ADDR, &temp_event);
+            }
+            break;
+        }
+        case SET_DEV_RESET: { // 设备重启
+            if (data_length != 1) return;
+            if (buf->buffer[4] == 0x00) { // 重启的设备是面板
+                event_callback(SET_RESET, NULL);
+            }
+            break;
+        }
+        case SET_DEG_INFO: { // 设备信息
+            if (buf->buffer[6] != my_addr) return;
+            if (data_length != 4) return;
+
+            if (buf->buffer[4] == 0x00) { // 获取信息的设备是面板
+                event_callback(GET_INFO, NULL);
+                app_send_to_software(SET_DEG_INFO);
+            }
+            break;
+        }
+        default:
+            break;
     }
 }
 
-// 组帧上报
+// 组帧上报给上位机
 void app_protocol_build(uint8_t level, uint8_t status, uint8_t key_num)
 {
     if (key_num > KEY_NUMBER) {
@@ -155,13 +138,14 @@ void app_protocol_build(uint8_t level, uint8_t status, uint8_t key_num)
     }
     memset(&my_panel_frame, 0, sizeof(my_panel_frame));
 
-    my_panel_frame.data[0]  = PANEL_FRAME_TX_HEAD;
-    my_panel_frame.data[1]  = PANEL_FRAME_TX_TYPE;
-    my_panel_frame.data[2]  = PANEL_FRAME_TX_DATA_LEN;
-    my_panel_frame.data[3]  = dev_addr;
-    my_panel_frame.data[4]  = level;
-    my_panel_frame.data[5]  = status;
-    my_panel_frame.data[6]  = key_num;
+    my_panel_frame.data[0] = PANEL_FRAME_TX_HEAD;
+    my_panel_frame.data[1] = PANEL_FRAME_TX_TYPE;
+    my_panel_frame.data[2] = PANEL_FRAME_TX_DATA_LEN;
+    my_panel_frame.data[3] = dev_addr; // 面板地址
+    my_panel_frame.data[4] = level;    // 触发类型
+    my_panel_frame.data[5] = status;   // 面板状态
+    my_panel_frame.data[6] = key_num;  // 按键号
+
     my_panel_frame.data[7]  = 0x00; // reserve_1
     my_panel_frame.data[8]  = 0x00; // reserve_2
     my_panel_frame.data[9]  = app_panel_frame_crc(&my_panel_frame.data[3], my_panel_frame.data[2]);
@@ -169,21 +153,32 @@ void app_protocol_build(uint8_t level, uint8_t status, uint8_t key_num)
     my_panel_frame.data[11] = 0x0A;
 
     my_panel_frame.length = 12;
-    APP_PRINTF_BUF("tx", my_panel_frame.data, my_panel_frame.length);
     bsp_usart_tx(my_panel_frame.data, my_panel_frame.length);
 }
 
-void app_send_to_software(void)
+void app_send_to_software(uint8_t type)
 {
-    // 向上位机软件发送获取地址帧
-    uint8_t send_array[3];
-    send_array[0] = 0xB1;
-    send_array[1] = 0xB2;
-    send_array[2] = 0xB3;
+    uint8_t send_array[9];
+    send_array[0] = 0xFE;
+    send_array[1] = 0xBB;
+    send_array[2] = 0x03;
 
-    apply_addr = true; // 本设备发送了申请地址请求
-    app_timer_start(100, app_delay_apply_addr, false, NULL, "apply");
+    send_array[7] = 0x0D;
+    send_array[8] = 0x0A;
 
+    if (type == SET_ADDR_SINGLE) { // 单发地址
+        send_array[3] = type;
+        send_array[4] = 0xB1;
+        send_array[5] = 0xB2;
+        send_array[6] = 0xB3;
+        apply_addr    = true; // 本设备发送了申请地址请求
+        app_timer_start(500, app_delay_apply_addr, false, NULL, "apply");
+    } else if (type == SET_DEG_INFO) {
+        send_array[3] = type;
+        send_array[4] = 0x00;    // 设备类型,面板为0x00
+        send_array[5] = DEV_VER; // 软件版本
+        send_array[6] = dev_get_config()->dev_addr;
+    }
     bsp_usart_tx(send_array, sizeof(send_array));
 }
 

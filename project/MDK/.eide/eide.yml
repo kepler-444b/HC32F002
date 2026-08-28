@@ -116,6 +116,8 @@ targets:
         - RTE/_HC32F002
       libList: []
     excludeList: []
+    settings:
+      debugger: cortex-debug
     toolchain: AC6
     toolchainConfigMap:
       AC6:

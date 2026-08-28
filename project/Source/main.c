@@ -6,10 +6,12 @@
 
 int main(void)
 {
+    delay1ms(100);
     app_timer_init();
     app_protocol_init();
     dev_jump_dev();
     bsp_usart_init(9600);
+
     while (1) {
         app_timer_poll();
         bsp_usart_has_data();
